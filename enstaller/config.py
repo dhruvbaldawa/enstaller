@@ -35,7 +35,7 @@ KEYRING_SERVICE_NAME = 'Enthought.com'
 config_fn = ".enstaller4rc"
 home_config_path = abs_expanduser("~/" + config_fn)
 system_config_path = join(sys.prefix, config_fn)
-webservice_base_url = 'https://api.enthought.com'
+webservice_base_url = 'https://api.enthought.com/eggs'
 repo_base_url = 'http://www.enthought.com/eggs'
 
 default = dict(
@@ -92,7 +92,7 @@ RC_TMPL = """\
 
 %(auth_section)s
 
-# `use_webservice` refers to using 'https://api.enthought.com/eggs/'.
+# `use_webservice` refers to using '%(webservice_base_url)s/'.
 # The default is True; that is, the webservice URL is used for fetching
 # eggs.  Uncommenting changes this behavior to using the explicit
 # IndexedRepos listed below.
@@ -107,11 +107,11 @@ RC_TMPL = """\
 # Windows systems backslashes in a directory path need to escaped, e.g.:
 # r'file://C:\\repository\\' or 'file://C:\\\\repository\\\\'
 IndexedRepos = [
-#  'https://www.enthought.com/repo/ets/eggs/{SUBDIR}/',
-  'https://www.enthought.com/repo/epd/GPL-eggs/{SUBDIR}/',
-  'https://www.enthought.com/repo/epd/eggs/{SUBDIR}/',
+#  '%(repo_base_url)s/ets/eggs/{SUBDIR}/',
+  '%(repo_base_url)s/epd/GPL-eggs/{SUBDIR}/',
+  '%(repo_base_url)s/epd/eggs/{SUBDIR}/',
 # The Enthought PyPI build mirror:
-  'http://www.enthought.com/repo/pypi/eggs/{SUBDIR}/',
+  '%(repo_base_url)s/pypi/eggs/{SUBDIR}/',
 ]
 
 # Install prefix (enpkg --prefix and --sys-prefix options overwrite
@@ -173,9 +173,19 @@ def write(username=None, password=None, proxy=None):
         proxy_line = 'proxy = %r' % proxy
     else:
         proxy_line = '#proxy = <proxy string>  # e.g. "123.0.1.2:8080"'
-
+    
+    format_dict = {
+                   'py_ver': PY_VER,
+                   'sys_prefix': sys.prefix,
+                   'version': version,
+                   'proxy_line': proxy_line,
+                   'auth_section': auth_section,
+                   'webservice_base_url': webservice_base_url,
+                   'repo_base_url': repo_base_url,
+                   }
+    
     fo = open(path, 'w')
-    fo.write(RC_TMPL % locals())
+    fo.write(RC_TMPL % format_dict)
     fo.close()
     print "Wrote configuration file:", path
     clear_cache()
