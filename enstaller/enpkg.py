@@ -28,7 +28,7 @@ def create_joined_store(urls):
 
 def get_default_url():
     import plat
-    return '%s/%s/' % (webservice_base_url, plat.custom_plat)
+    return '%s/eggs/%s/' % (webservice_base_url, plat.custom_plat)
 
 def get_default_kvs():
     return RemoteHTTPIndexedStore(get_default_url())

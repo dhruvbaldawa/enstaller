@@ -35,7 +35,7 @@ KEYRING_SERVICE_NAME = 'Enthought.com'
 config_fn = ".enstaller4rc"
 home_config_path = abs_expanduser("~/" + config_fn)
 system_config_path = join(sys.prefix, config_fn)
-webservice_base_url = 'https://api.enthought.com/eggs'
+webservice_base_url = 'https://api.enthought.com'
 repo_base_url = 'http://www.enthought.com/eggs'
 
 default = dict(
@@ -92,7 +92,7 @@ RC_TMPL = """\
 
 %(auth_section)s
 
-# `use_webservice` refers to using '%(webservice_base_url)s/'.
+# `use_webservice` refers to using '%(webservice_base_url)s/eggs/'.
 # The default is True; that is, the webservice URL is used for fetching
 # eggs.  Uncommenting changes this behavior to using the explicit
 # IndexedRepos listed below.
@@ -323,7 +323,7 @@ def authenticate(auth, remote=None):
     If authentication fails, raise an exception.
     """
     user = {}
-    if get('use_webservice'):
+    if get('use_webservice') or remote is None:
         # check credentials using web API
         try:
             user = web_auth(auth)
@@ -462,7 +462,7 @@ def get(key, default=None):
     return read().get(key, default)
 
 
-def print_config(remote):
+def print_config(remote=None):
     print "Python version:", PY_VER
     print "enstaller version:", __version__
     print "sys.prefix:", sys.prefix
