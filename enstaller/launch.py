@@ -4,7 +4,7 @@ import subprocess
 from os.path import isfile, join
 
 from enpkg import Enpkg
-
+from config import repo_base_url
 
 class Launch(Enpkg):
 
@@ -77,7 +77,7 @@ if __name__ == '__main__':
     from enpkg import create_joined_store
     from plat import subdir
 
-    urls = ['http://www.enthought.com/repo/.jpm/%s/' % subdir]
+    urls = ['%s/.jpm/%s/' % (repo_base_url, subdir)]
 
     remote = create_joined_store(urls)
     x = Launch(remote,

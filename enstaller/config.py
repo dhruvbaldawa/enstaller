@@ -35,6 +35,8 @@ KEYRING_SERVICE_NAME = 'Enthought.com'
 config_fn = ".enstaller4rc"
 home_config_path = abs_expanduser("~/" + config_fn)
 system_config_path = join(sys.prefix, config_fn)
+webservice_base_url = 'https://api.enthought.com'
+repo_base_url = 'http://www.enthought.com/eggs'
 
 default = dict(
     prefix=sys.prefix,
@@ -209,7 +211,7 @@ class AuthFailedError(Exception):
 
 
 def web_auth(auth,
-        api_url='https://api.enthought.com/accounts/user/info/'):
+        api_url=None):
     """
     Authenticate a user's credentials (an `auth` tuple of username,
     password) using the web API.  Return a dictionary containing user
@@ -219,6 +221,9 @@ def web_auth(auth,
     """
     import json
     import urllib2
+    
+    if api_url is None:
+        api_url = '%s/accounts/user/info/' % (webservice_base_url)
 
     # Make basic local checks
     username, password = auth

@@ -11,7 +11,7 @@ from resolve import Req, Resolve, comparable_info
 from fetch import FetchAPI
 from egg_meta import is_valid_eggname, split_eggname
 from history import History
-
+from config import webservice_base_url
 
 def create_joined_store(urls):
     stores = []
@@ -28,7 +28,7 @@ def create_joined_store(urls):
 
 def get_default_url():
     import plat
-    return 'https://api.enthought.com/eggs/%s/' % plat.custom_plat
+    return '%s/eggs/%s/' % (webservice_base_url, plat.custom_plat)
 
 def get_default_kvs():
     return RemoteHTTPIndexedStore(get_default_url())
